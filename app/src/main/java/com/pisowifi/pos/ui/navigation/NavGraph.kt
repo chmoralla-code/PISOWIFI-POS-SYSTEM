@@ -24,6 +24,7 @@ sealed class Screen(val route: String) {
     object Analytics : Screen("analytics")
     object Areas : Screen("areas")
     object Harvest : Screen("harvest")
+    object SharedHarvest : Screen("shared_harvest")
 }
 
 @Composable
@@ -74,6 +75,9 @@ fun PosNavGraph() {
         }
         composable(Screen.Harvest.route) {
             HarvestScreen(repository = repository, navController = navController)
+        }
+        composable(Screen.SharedHarvest.route) {
+            SharedHarvestScreen(repository = repository, navController = navController)
         }
     }
 }

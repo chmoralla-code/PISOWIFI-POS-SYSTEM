@@ -40,4 +40,13 @@ class PisoRepository(private val database: AppDatabase) {
     fun getHarvestsWithDetails() = harvestDao.getAllWithDetails()
     fun getPendingShares() = harvestDao.getPendingShares()
     suspend fun getSalesSince(pisowifiId: Int, since: Long) = harvestDao.getSalesSince(pisowifiId, since)
+
+    suspend fun updateAreaShareStatus(areaId: Int, given: Boolean) = areaDao.updateShareStatus(areaId, given)
+    fun getAreasPendingShare() = areaDao.getPendingShares()
+    fun getAreasCompletedShare() = areaDao.getCompletedShares()
+    suspend fun getTotalSalesByArea(areaId: Int) = areaDao.getTotalSalesByArea(areaId)
+    suspend fun getTotalHarvestShareByArea(areaId: Int) = areaDao.getTotalHarvestShareByArea(areaId)
+
+    suspend fun clearAllSales() = saleDao.clearAll()
+    suspend fun clearAllHarvests() = harvestDao.clearAll()
 }

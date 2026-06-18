@@ -28,6 +28,9 @@ interface SaleDao {
     @Delete
     suspend fun delete(sale: SaleRecord)
 
+    @Query("DELETE FROM sale_records")
+    suspend fun clearAll()
+
     @Query("SELECT COALESCE(SUM(amount), 0) FROM sale_records WHERE date >= :start AND date <= :end")
     fun getTotalSales(start: Long, end: Long): Flow<Double>
 

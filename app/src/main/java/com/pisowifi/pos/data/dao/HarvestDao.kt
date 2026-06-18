@@ -51,6 +51,9 @@ interface HarvestDao {
     @Query("DELETE FROM harvest_records WHERE id = :id")
     suspend fun deleteById(id: Int)
 
+    @Query("DELETE FROM harvest_records")
+    suspend fun clearAll()
+
     @Query("SELECT COALESCE(SUM(amount), 0) FROM sale_records WHERE pisowifi_id = :pisowifiId AND date >= :since")
     suspend fun getSalesSince(pisowifiId: Int, since: Long): Double
 }

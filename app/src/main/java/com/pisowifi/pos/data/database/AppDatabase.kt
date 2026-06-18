@@ -15,7 +15,7 @@ import com.pisowifi.pos.data.entity.SaleRecord
 
 @Database(
     entities = [Area::class, PisowifiDevice::class, SaleRecord::class, HarvestRecord::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,7 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "pisowifi_pos_db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration().build().also { INSTANCE = it }
             }
         }
     }

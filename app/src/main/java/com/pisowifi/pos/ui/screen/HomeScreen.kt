@@ -130,6 +130,29 @@ fun HomeScreen(repository: PisoRepository, navController: NavController) {
             }
         }
 
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                ActionChip(
+                    onClick = { navController.navigate(Screen.SharedHarvest.route) },
+                    label = { Text("Shared Harvest") },
+                    icon = Icons.Default.Share,
+                    modifier = Modifier.weight(1f)
+                )
+                ActionChip(
+                    onClick = { navController.navigate(Screen.Areas.route) },
+                    label = { Text("Areas") },
+                    icon = Icons.Default.LocationOn,
+                    modifier = Modifier.weight(1f)
+                )
+                ActionChip(
+                    onClick = { navController.navigate(Screen.Harvest.route) },
+                    label = { Text("Harvest") },
+                    icon = Icons.Default.Inventory2,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
         if (pendingHarvests.isNotEmpty()) {
             item {
                 Card(
@@ -153,6 +176,43 @@ fun HomeScreen(repository: PisoRepository, navController: NavController) {
                         )
                     }
                 }
+            }
+        }
+
+        item {
+            var showClearConfirm by remember { mutableStateOf(false) }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Text("Data", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                TextButton(
+                    onClick = { showClearConfirm = true },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Icon(Icons.Default.DeleteForever, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("Clear All Sales")
+                }
+            }
+            if (showClearConfirm) {
+                AlertDialog(
+                    onDismissRequest = { showClearConfirm = false },
+                    title = { Text("Clear All Sales?") },
+                    text = { Text("This will permanently delete ALL sale and harvest records. This cannot be undone.") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            scope.launch {
+                                repository.clearAllSales()
+                                repository.clearAllHarvests()
+                            }
+                            showClearConfirm = false
+                        }) { Text("Delete All", color = MaterialTheme.colorScheme.error) }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showClearConfirm = false }) { Text("Cancel") }
+                    }
+                )
             }
         }
 
