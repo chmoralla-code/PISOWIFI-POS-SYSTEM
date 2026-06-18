@@ -51,14 +51,13 @@ fun AnalyticsScreen(repository: PisoRepository, navController: NavController) {
                 Text("Income Period", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                    AnalyticsPeriod.entries.forEachIndexed { index, period ->
+                    val periods = AnalyticsPeriod.entries
+                    for (i in periods.indices) {
+                        val period = periods[i]
                         SegmentedButton(
                             selected = selectedPeriod == period,
                             onClick = { selectedPeriod = period },
-                            shape = SegmentedButtonDefaults.itemShape(
-                                index = index,
-                                count = AnalyticsPeriod.entries.size
-                            )
+                            shape = SegmentedButtonDefaults.itemShape(i, periods.size)
                         ) {
                             Text(
                                 when (period) {
