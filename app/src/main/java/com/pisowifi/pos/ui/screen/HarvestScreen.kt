@@ -2,6 +2,7 @@ package com.pisowifi.pos.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -220,6 +221,7 @@ private fun HarvestCard(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddHarvestDialog(
     devices: List<com.pisowifi.pos.data.entity.PisowifiDevice>,
