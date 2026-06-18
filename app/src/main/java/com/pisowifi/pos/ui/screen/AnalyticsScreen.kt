@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -74,10 +75,6 @@ fun AnalyticsScreen(repository: PisoRepository, navController: NavController) {
             }
 
             item {
-                val periodData = remember(selectedPeriod) {
-                    calculatePeriodData(repository, selectedPeriod)
-                }
-
                 var total by remember { mutableStateOf(0.0) }
 
                 when (selectedPeriod) {
@@ -216,9 +213,7 @@ private fun MonthlyBarChart(repository: PisoRepository) {
         for (day in 1..currentDay) {
             val start = DateUtils.dateToMillis(now.get(Calendar.YEAR), now.get(Calendar.MONTH), day)
             val end = start + 86400000
-            repository.getTotalSales(start, end).collect { amount ->
-                dailyTotals[day - 1] = amount
-            }
+            dailyTotals[day - 1] = repository.getTotalSales(start, end).first()
         }
     }
 
@@ -264,9 +259,7 @@ private fun YearlyBarChart(repository: PisoRepository) {
             val start = DateUtils.dateToMillis(now.get(Calendar.YEAR), m, 1)
             val end = DateUtils.dateToMillis(now.get(Calendar.YEAR), m,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH)) + 86400000
-            repository.getTotalSales(start, end).collect { amount ->
-                monthlyTotals[m] = amount
-            }
+            monthlyTotals[m] = repository.getTotalSales(start, end).first()
         }
     }
 
@@ -350,6 +343,4 @@ private fun SimpleBarChart(
     }
 }
 
-private fun calculatePeriodData(repository: PisoRepository, period: AnalyticsPeriod) {
-    // Trigger recomposition when period changes
-}
+

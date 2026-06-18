@@ -110,12 +110,13 @@ fun HarvestScreen(repository: PisoRepository, navController: NavController) {
         AddHarvestDialog(
             devices = devices,
             onDismiss = { showAddDialog = false },
-            onConfirm = { deviceId, amount ->
+            onConfirm = { deviceId, amount, shareAmt ->
                 scope.launch {
                     repository.addHarvest(
                         HarvestRecord(
                             pisowifiId = deviceId,
                             totalSales = amount,
+                            shareAmount = shareAmt,
                             harvestDate = System.currentTimeMillis()
                         )
                     )
@@ -223,7 +224,7 @@ private fun HarvestCard(
 private fun AddHarvestDialog(
     devices: List<com.pisowifi.pos.data.entity.PisowifiDevice>,
     onDismiss: () -> Unit,
-    onConfirm: (Int, Double) -> Unit
+    onConfirm: (Int, Double, Double) -> Unit
 ) {
     var selectedDeviceId by remember { mutableIntStateOf(-1) }
     var amount by remember { mutableStateOf("") }
@@ -287,7 +288,7 @@ private fun AddHarvestDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirm(selectedDeviceId, amount.toDoubleOrNull() ?: 0.0)
+                    onConfirm(selectedDeviceId, amount.toDoubleOrNull() ?: 0.0, shareAmount.toDoubleOrNull() ?: 0.0)
                 },
                 enabled = selectedDeviceId > 0 && (amount.toDoubleOrNull() ?: 0.0) > 0
             ) { Text("Save") }
